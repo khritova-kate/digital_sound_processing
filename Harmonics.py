@@ -171,4 +171,6 @@ def plot_harmonic(harmonic, numder_h, sound_tser_shape, sample_rate, windows_sha
     x_labels  = [round(i,3) for i in np.linspace(0, end_x_label , x_dash_n)]           # метки делений - время
     plt.xticks(x_ticks,x_labels)                                                       # установить текущие положения делений и метки оси X
     plt.xlabel("sec")
+    
+    ## подписываем ось y
     plt.ylabel ("Hz")

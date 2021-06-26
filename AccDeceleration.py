@@ -1,14 +1,20 @@
 import numpy as np
+import scipy.signal as sig
 
 
 '''
 Ускорение/змедление воспроизведения путем удаления/повторения
 элементов массива, соответсвующего звуковому временному ряду
+Предварительно проводится фильтрация высоких частот с помощью фильтра
+Чебышева
 Вход:  sound_tser - звуковой временной ряд в качестве массива numpy
        speed_c - коэффициент ускорения/замедления
 Выход: звуковой временной ряд в качестве массива numpy
 '''
-def speed_up(sound_tser, speed_c):
+def speed_up(sound_tser, sample_rate, speed_c, order = 5, w0 = 6000):
+    if (speed_c > 1.5):
+        sos = sig.cheby1 (order, 1, np.mean(wn), btype='lowpass', output ='sos', fs = sample_rate)
+        sound_tser = sl.sosfiltfilt (sos, sound_tser)
     stop = int(sound_tser.shape[0]/speed_c)
     ids  = [int(speed_c*i) for i in range(stop)]
     return np.array([sound_tser[i] for i in ids])
@@ -51,8 +57,7 @@ def slow_down1(sound_tser, speed_c):
     return res
 '''
 Замедление воспроизведения больше чем в 2 раза путем добавления
-элементов, лежащих на прямой линии, проходящей через соседние 
-известные значения
+элементов, равных среднему значению соседей
 Вход:  sound_tser - звуковой временной ряд в качестве массива numpy
        speed_c - коэффициент ускорения/замедления
 Выход: звуковой временной ряд в качестве массива numpy
